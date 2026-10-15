@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Master - Free AI Tools</title>
+<meta name="description" content="Free AI tools for creators. Generate video prompts, YouTube titles, stories and hashtags.">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f8ff;color:#172554}
+header{background:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 12px #dbeafe;position:sticky;top:0}
+.logo{font-size:23px;font-weight:bold;color:#2563eb}
+select,button,textarea,input{font:inherit}
+header select{padding:8px;border:1px solid #dbeafe;border-radius:8px}
+.hero{text-align:center;padding:55px 18px 35px;background:linear-gradient(135deg,#dbeafe,#fff)}
+.hero h1{font-size:36px;margin:10px 0;color:#1d4ed8}
+.hero p{color:#475569;line-height:1.6}
+.badge{background:#dbeafe;color:#1d4ed8;border-radius:20px;padding:8px 14px;font-size:13px}
+.tools{max-width:1000px;margin:28px auto;padding:0 15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:14px}
+.card{background:white;border:1px solid #dbeafe;border-radius:15px;padding:20px 10px;text-align:center;cursor:pointer;box-shadow:0 4px 15px #e2e8f0;transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:#60a5fa}
+.icon{font-size:30px}
+.card h3{font-size:15px;margin-bottom:5px}
+.card p{font-size:12px;color:#64748b}
+.panel{max-width:750px;margin:20px auto 45px;background:white;padding:24px;border-radius:18px;box-shadow:0 5px 25px #dbeafe}
+.panel h2{margin-top:0;color:#1d4ed8}
+label{display:block;margin:14px 0 7px;font-weight:bold}
+input,textarea{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:10px;background:#fff}
+textarea{min-height:100px;resize:vertical}
+.primary{background:#2563eb;color:white;border:0;border-radius:10px;padding:13px 18px;width:100%;margin-top:15px;font-weight:bold;cursor:pointer}
+.secondary{background:#e0ecff;color:#1d4ed8;border:0;border-radius:8px;padding:10px 15px;cursor:pointer}
+#output{white-space:pre-wrap;line-height:1.6;background:#f8fafc;border:1px solid #dbeafe;padding:14px;border-radius:10px;min-height:50px;margin-top:15px;overflow-wrap:anywhere}
+footer{text-align:center;padding:25px;background:#eaf2ff;color:#475569;font-size:13px}
+@media(max-width:500px){.hero h1{font-size:29px}.panel{margin:15px;padding:18px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🤖 AI Master</div>
+<select id="language" onchange="changeLanguage()">
+<option value="en">English</option>
+<option value="hi">हिंदी</option>
+</select>
+</header>
+
+<section class="hero">
+<span class="badge">✨ FREE TOOLS FOR CREATORS</span>
+<h1 id="headline">Your All-in-One AI Toolkit</h1>
+<p id="subhead">Create ideas, video prompts, stories and YouTube content in seconds.</p>
+</section>
+
+<section class="tools">
+<div class="card" onclick="choose('video')"><div class="icon">🎬</div><h3>Video Prompt</h3><p>AI video ideas</p></div>
+<div class="card" onclick="choose('image')"><div class="icon">🖼️</div><h3>Image Prompt</h3><p>Image descriptions</p></div>
+<div class="card" onclick="choose('title')"><div class="icon">📺</div><h3>YouTube Title</h3><p>Title ideas</p></div>
+<div class="card" onclick="choose('description')"><div class="icon">✍️</div><h3>Description</h3><p>Video descriptions</p></div>
+<div class="card" onclick="choose('story')"><div class="icon">📖</div><h3>Story Generator</h3><p>Story drafts</p></div>
+<div class="card" onclick="choose('hashtag')"><div class="icon">#️⃣</div><h3>Hashtags</h3><p>Social tags</p></div>
+<div class="card" onclick="choose('bio')"><div class="icon">👤</div><h3>Bio Generator</h3><p>Profile bio ideas</p></div>
+<div class="card" onclick="choose('idea')"><div class="icon">💡</div><h3>Idea Generator</h3><p>Content ideas</p></div>
+</section>
+
+<section class="panel">
+<h2 id="toolTitle">✨ Choose a tool to get started</h2>
+<label id="inputLabel" for="topic">Your topic or keyword</label>
+<input id="topic" placeholder="e.g. village cooking, funny cats, AI technology">
+<label id="detailLabel" for="details">Extra details (optional)</label>
+<textarea id="details" placeholder="Describe what you want..."></textarea>
+<button class="primary" onclick="generate()" id="generateButton">Generate Now ✨</button>
+<div id="output">Your result will appear here.</div>
+<button class="secondary" onclick="copyResult()" id="copyButton">📋 Copy Result</button>
+</section>
+
+<footer>© 2026 AI Master · Free Creator Tools<br><br>Starter version · AI API integration can be added later.</footer>
+
+<script>
+let currentTool='video';
+const names={
+video:'🎬 Video Prompt Generator',
+image:'🖼️ Image Prompt Generator',
+title:'📺 YouTube Title Generator',
+description:'✍️ YouTube Description Generator',
+story:'📖 Story Generator',
+hashtag:'#️⃣ Hashtag Generator',
+bio:'👤 Bio Generator',
+idea:'💡 Content Idea Generator'
+};
+function choose(tool){
+currentTool=tool;
+document.getElementById('toolTitle').textContent=names[tool];
+document.getElementById('output').textContent='Your result will appear here.';
+document.querySelector('.panel').scrollIntoView({behavior:'smooth'});
+}
+function generate(){
+let topic=document.getElementById('topic').value.trim();
+let details=document.getElementById('details').value.trim();
+if(!topic){alert('Please enter a topic first!');return}
+let result='';
+switch(currentTool){
+case 'video':
+result='AI VIDEO PROMPT\nTopic: '+topic+'\n\nCreate a high-quality cinematic video about '+topic+'. '+(details||'Use realistic details, smooth camera movements, natural lighting and engaging visuals.')+'\n\nStyle: cinematic, 4K, detailed composition, smooth transitions, professional quality.';
+break;
+case 'image':
+result='AI IMAGE PROMPT\nTopic: '+topic+'\n\nCreate a highly detailed, visually stunning image of '+topic+'. '+(details||'Use professional lighting, balanced composition, rich textures and realistic details.')+'\n\nQuality: high resolution, sharp focus, beautiful composition.';
+break;
+case 'title':
+result='YouTube Title Ideas:\n1. '+topic+': You Won’t Believe What Happens!\n2. The Amazing Story of '+topic+'\n3. Everything You Need to Know About '+topic+'\n4. '+topic+' | Must Watch!\n5. Discover the Secret of '+topic;
+break;
+case 'description':
+result='Welcome to our video about '+topic+'!\n\n'+(details||'Watch until the end and enjoy this video.')+'\n\nIf you enjoyed this video, LIKE, SHARE and SUBSCRIBE for more!\n\n#'+topic.replace(/[^a-zA-Z0-9]/g,'')+' #Shorts #Trending';
+break;
+case 'story':
+result='STORY: '+topic+'\n\nOnce upon a time, there was a world where '+topic+' changed everything. '+(details||'The main character faced an unexpected challenge, discovered the power of courage and kindness, and began a remarkable journey.')+'\n\nAt last, an important lesson was learned: never give up on a good dream.\n\nTHE END';
+break;
+case 'hashtag':
+result='Suggested hashtags:\n'+['#'+topic.replace(/[^a-zA-Z0-9]/g,''),'#Trending','#Viral','#Shorts','#ContentCreator','#Explore','#Inspiration','#AI','#YouTube','#Reels'].join(' ');
+break;
+case 'bio':
+result='✨ Passionate about '+topic+'\n🎬 Creating content every day\n💡 Ideas | Creativity | Inspiration\n👇 Follow for more!';
+break;
+case 'idea':
+result='Content ideas about '+topic+':\n1. Beginner’s guide to '+topic+'\n2. 5 surprising facts about '+topic+'\n3. Common mistakes people make with '+topic+'\n4. Behind the scenes of '+topic+'\n5. Myths vs facts about '+topic+'\n6. A quick tutorial about '+topic+'\n7. The future of '+topic;
+break;
+}
+document.getElementById('output').textContent=result;
+}
+function copyResult(){
+let text=document.getElementById('output').textContent;
+if(!text){return}
+if(navigator.clipboard&&window.isSecureContext){
+navigator.clipboard.writeText(text).then(()=>alert('Copied!')).catch(()=>fallbackCopy(text));
+}else{fallbackCopy(text)}
+}
+function fallbackCopy(text){
+let el=document.createElement('textarea');el.value=text;document.body.appendChild(el);el.select();document.execCommand('copy');el.remove();alert('Copy attempted. You can also select the result and copy it.');
+}
+function changeLanguage(){
+let hi=document.getElementById('language').value==='hi';
+document.getElementById('headline').textContent=hi?'आपके सभी AI टूल्स एक ही जगह':'Your All-in-One AI Toolkit';
+document.getElementById('subhead').textContent=hi?'कुछ ही सेकंड में वीडियो प्रॉम्प्ट, कहानियाँ और YouTube कंटेंट तैयार करें।':'Create ideas, video prompts, stories and YouTube content in seconds.';
+document.getElementById('inputLabel').textContent=hi?'अपना विषय या कीवर्ड':'Your topic or keyword';
+document.getElementById('detailLabel').textContent=hi?'अतिरिक्त जानकारी (वैकल्पिक)':'Extra details (optional)';
+document.getElementById('generateButton').textContent=hi?'अभी बनाएँ ✨':'Generate Now ✨';
+document.getElementById('copyButton').textContent=hi?'📋 परिणाम कॉपी करें':'📋 Copy Result';
+}
+</script>
+</body>
+  </html>
