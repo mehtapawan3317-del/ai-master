@@ -91,8 +91,6 @@ document.getElementById('toolTitle').textContent=names[tool];
 document.getElementById('output').textContent='Your result will appear here.';
 document.querySelector('.panel').scrollIntoView({behavior:'smooth'});
 }
-
-result='AI IMAGE PROMPT\nTopic: '+topic+'\n\nCreate a highly detailed, visually stunning image of '+topic+'. '+(details||'Use professional lighting, balanced composition, rich textures and realistic details.')+'\n\nQuality: high resolution, sharp focus, beautiful composition.';
 async function generate() {
   const topic = document.getElementById('topic').value.trim();
   const details = document.getElementById('details').value.trim();
