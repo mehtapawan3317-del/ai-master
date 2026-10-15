@@ -91,38 +91,65 @@ document.getElementById('toolTitle').textContent=names[tool];
 document.getElementById('output').textContent='Your result will appear here.';
 document.querySelector('.panel').scrollIntoView({behavior:'smooth'});
 }
-function generate(){
-let topic=document.getElementById('topic').value.trim();
-let details=document.getElementById('details').value.trim();
-if(!topic){alert('Please enter a topic first!');return}
-let result='';
-switch(currentTool){
-case 'video':
-result='AI VIDEO PROMPT\nTopic: '+topic+'\n\nCreate a high-quality cinematic video about '+topic+'. '+(details||'Use realistic details, smooth camera movements, natural lighting and engaging visuals.')+'\n\nStyle: cinematic, 4K, detailed composition, smooth transitions, professional quality.';
-break;
-case 'image':
+
 result='AI IMAGE PROMPT\nTopic: '+topic+'\n\nCreate a highly detailed, visually stunning image of '+topic+'. '+(details||'Use professional lighting, balanced composition, rich textures and realistic details.')+'\n\nQuality: high resolution, sharp focus, beautiful composition.';
-break;
-case 'title':
-result='YouTube Title Ideas:\n1. '+topic+': You Won’t Believe What Happens!\n2. The Amazing Story of '+topic+'\n3. Everything You Need to Know About '+topic+'\n4. '+topic+' | Must Watch!\n5. Discover the Secret of '+topic;
-break;
-case 'description':
-result='Welcome to our video about '+topic+'!\n\n'+(details||'Watch until the end and enjoy this video.')+'\n\nIf you enjoyed this video, LIKE, SHARE and SUBSCRIBE for more!\n\n#'+topic.replace(/[^a-zA-Z0-9]/g,'')+' #Shorts #Trending';
-break;
-case 'story':
-result='STORY: '+topic+'\n\nOnce upon a time, there was a world where '+topic+' changed everything. '+(details||'The main character faced an unexpected challenge, discovered the power of courage and kindness, and began a remarkable journey.')+'\n\nAt last, an important lesson was learned: never give up on a good dream.\n\nTHE END';
-break;
-case 'hashtag':
-result='Suggested hashtags:\n'+['#'+topic.replace(/[^a-zA-Z0-9]/g,''),'#Trending','#Viral','#Shorts','#ContentCreator','#Explore','#Inspiration','#AI','#YouTube','#Reels'].join(' ');
-break;
-case 'bio':
-result='✨ Passionate about '+topic+'\n🎬 Creating content every day\n💡 Ideas | Creativity | Inspiration\n👇 Follow for more!';
-break;
-case 'idea':
-result='Content ideas about '+topic+':\n1. Beginner’s guide to '+topic+'\n2. 5 surprising facts about '+topic+'\n3. Common mistakes people make with '+topic+'\n4. Behind the scenes of '+topic+'\n5. Myths vs facts about '+topic+'\n6. A quick tutorial about '+topic+'\n7. The future of '+topic;
-break;
+async function generate() {
+  const topic = document.getElementById('topic').value.trim();
+  const details = document.getElementById('details').value.trim();
+  const output = document.getElementById('output');
+  const button = document.getElementById('generateButton');
+
+  if (!topic) {
+    alert('Please enter a topic first!');
+    return;
+  }
+
+  output.textContent = '✨ Gemini AI is generating your result...';
+  if (button) button.disabled = true;
+
+  const names = {
+    video: 'High-quality cinematic AI video prompt',
+    image: 'Detailed AI image generation prompt',
+    title: 'Viral YouTube titles',
+    description: 'SEO-optimized YouTube description',
+    story: 'Creative and engaging story',
+    hashtag: 'Relevant trending hashtags',
+    bio: 'Attractive social media bio',
+    idea: 'Creative content ideas'
+  };
+
+  const prompt =
+    'You are an expert AI content creator. Create the following: ' +
+    (names[currentTool] || 'Creative content') +
+    '. Topic: ' + topic +
+    '. Extra details: ' + (details || 'Use your best judgment') +
+    '. Make the result high quality, useful, and ready to copy. ' +
+    'Use clear formatting. Reply in Hindi if the user requests Hindi; otherwise use English.';
+
+  try {
+    const response = await fetch(
+      'https://tiny-hall-7172.mehtapawan3317.workers.dev/generate',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(data.error || 'AI request failed. Please try again.');
+    }
+
+    output.textContent = data.text;
+  } catch (error) {
+    output.textContent = '❌ Error: ' + error.message +
+      '\n\nPlease check your internet connection and Cloudflare Worker settings.';
+  } finally {
+    if (button) button.disabled = false;
+  }
 }
-document.getElementById('output').textContent=result;
 }
 function copyResult(){
 let text=document.getElementById('output').textContent;
